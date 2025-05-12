@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import { Moon, Sun } from "lucide-react";
 
 const ButtonDarkMode = () => {
    const [theme, setTheme] = useState<'light' | 'dark'>('light'); // Siempre 'light' al inicio
@@ -33,12 +34,17 @@ const ButtonDarkMode = () => {
    if (!mounted) return null; // 👈 Muy importante para no renderizar antes de montar
 
    return (
-      <Switch
+      <div className=" flex gap-2 items-center">
+        {theme==='dark'&&<Moon className="size-5"/>}
+        {theme==='light'&&<Sun className="size-5"/>}
+
+        <Switch
          checked={theme === "dark"}
          onCheckedChange={() => {
             setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
          }}
       />
+      </div>
    );
 };
 

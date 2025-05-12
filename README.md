@@ -1,36 +1,245 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Authenticación con Auth.js
 
-## Getting Started
+<https://authjs.dev/>
 
-First, run the development server:
+### 1- Instalación
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+npm install next-auth@beta
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2- Setup Envionment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Crear la variable AUTH_SECRET con la repuesta del comando
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+npx auth secret
+```
 
-## Learn More
+### 3- Configuración
 
-To learn more about Next.js, take a look at the following resources:
+Crear el archivo y el objeto Authjs
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-  Crear un arcivo con el nombre auth.ts guardar en la raiz del proyecto:
+   ```
+   import NextAuth from "next-auth"
+   export const { handlers, signIn, signOut, auth } = NextAuth({
+       providers: [],
+   })
+   ```
+-  Agregar un Manejador de rutas en src/app/api/auth/[...nextauth]/route.ts.
+   ```bash
+   import { handlers} from "@/auth" //Referencia al auth.ts que se acaba de crear
+   export const {GET,POST} = handlers
+   ```
+-  Agregue Middleware opcional para mantener viva la sesión, esto actualizará la caducidad de la sesión cada vez que se llame.
+   ```bash
+   export {auth as middleware} from "@/auth"
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Configurar Prisma
 
-## Deploy on Vercel
+### 1-Instalación
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+npm install @prisma/client @auth/prisma-adapter
+npm install prisma --save-dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 2-Crear esquema inicial
+
+Esto nos creará una carpeta con un esquema inicial de prisma y una variable .env como ejemplo de conexión ala BD postgress
+
+```
+npx prisma init
+```
+
+### 3- configurar cliente Prisma
+
+Para mejorar el rendimiento , podemos configurar la instancia de Prisma en **src/lib/db.ts** para garantizar que solo se cree una instancia a lo largo del proyecto y luego importarla desde cualquier archivo según sea necesario.
+configuración de archivos.
+
+```
+import { PrismaClient } from "@prisma/client"
+
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+
+export const prismaDb = globalForPrisma.prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prismaDb
+```
+
+### 4- Importamos la instancia de prisma
+
+Finalmente, podemos importar la instancia de Prisma desde el auth.ts
+
+```bash
+import NextAuth from "next-auth"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prismaDb } from "@/lib/db"
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prismaDb),
+  providers: [],
+})
+```
+
+### 5- Mejorar la compatibilidad de Prisma con [Edge compatibility](https://authjs.dev/guides/edge-compatibility)
+
+-  Creamos en la raiz el archivo auth.config.ts
+
+   ```bash
+    #  Configuración común de Auth.js (sin adaptador de base de datos)
+    #  Esto es solo un objeto, no una instancia completa de Auth.js
+    import type {NextAuthConfig} from "next-auth"
+    export default {
+        providers: [],
+    } satisfies NextAuthConfig
+
+   ```
+
+-  Instancia completa de Auth.js con adaptador y JWT
+
+   En el archivo auth.ts importamos la configuración anterior, pero además le agregamos el adaptador Prisma y configuramos la estrategia de sesión con JWT:
+
+   ```bash
+   import NextAuth from "next-auth"
+   import authConfig from "./auth.config"
+   import { PrismaAdapter} from "@auth/prisma-adapter"
+   import { prismaDb} from "@/lib/db"
+
+   export const {handlers,auth,signIn,signOut} = NextAuth({
+       adapter: PrismaAdapter(prismaDb),
+       session: {strategy: "jwt"},
+       ...authConfig,
+   })
+   ```
+
+-  Nuestro Middleware, que luego importaría la configuración sin el adaptador de base de datos e instanciar a su propio cliente Auth.js.
+   ```bash
+   import NextAuth from "next-auth"
+   import authConfig from "./auth.config"
+   export const {auth:middleware} = NextAuth(authConfig)
+   ```
+- Agregamos el matcher para el middelware.ts
+   ```bash
+   export const config = {
+      matcher:["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+   };
+   ```
+
+### 6 Agregamos un esquema inicial para la base de datos
+
+<details>
+<summary>Ver todo</summary>
+
+```bash
+generator client {
+  provider = "prisma-client-js"
+
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  user
+  admin
+}
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(user)
+
+  accounts Account[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model VerificationToken {
+  identifier String   @unique
+  token      String
+  expires    DateTime
+
+  @@id([identifier])
+}
+```
+</details>
+
+-  Crear la base de datos postgresSQL haciendo uso de pgadmin4, **No hacer nada más**
+-  Editamos la variable de entorno de la conexion ala base de datos que se habia creado con ***npx prisma init*** 
+   ```bash
+   #DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+   DATABASE_URL="postgresql://postgres:4545@localhost:5432/scholarships?schema=public"
+   ```
+- Ejecutamos los siguiente comandos:
+   ```bash
+   npx prisma generate
+   #Luego
+   npx prisma db push
+   ```
+- Con eso ya estaria creado la base de datos regresca pg admin para ver los cambios
+
+### 7- Configuramos el metodo de autenticacion [Credenciales](https://authjs.dev/getting-started/authentication/credentials)
+
+```bash
+#configuramos el archivo auth.config.ts
+#Esto es solo una simulación de login
+import type { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { prismaDb } from "@/lib/db";
+import bcrypt from "bcryptjs";
+export default {
+   providers: [
+      Credentials({
+         authorize: async (credentials) => {
+            let user = null
+            const user = await prismaDb.user.findUnique({
+               where: {
+                  email: credentials.email,
+               },
+            });
+            if (!user || !user.password) {
+                throw new Error("No user found");
+            }
+            const isValid = await bcrypt.compare(credentials.password, user.password);
+
+            if (!isValid) {
+              throw new Error("Incorrect password");
+            }
+
+            return user;
+         },
+      }),
+   ],
+} satisfies NextAuthConfig;
+```
+

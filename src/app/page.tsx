@@ -4,8 +4,7 @@ export default function Home() {
 
 
    return (
-      <div className="h-screen flex items-center justify-center dark:bg-neutral-700 bg-red-200">
-          
+      <div className="h-screen flex items-center justify-center dark:bg-neutral-700 bg-gray-100">
             <ButtonDarkMode />
       </div>
    );
