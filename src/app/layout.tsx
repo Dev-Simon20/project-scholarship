@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavigationMenuDemo } from "@/components/menu-custom/menu-custom";
+import ButtonDarkMode from "@/components/button-dark-mode/button-dark-mode";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -26,8 +27,10 @@ export default function RootLayout({
    return (
       <html lang="en">
          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+            className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-neutral-700 bg-gray-100 text-neutral-700 dark:text-white`}
          >
+            <ButtonDarkMode />
+
             {children}
          </body>
       </html>
