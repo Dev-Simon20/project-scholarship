@@ -9,6 +9,6 @@ const LogoutButton = () => {
          redirectTo: "/projects/my-little-shop/login",
       });
    };
-   return <Button onClick={() => handleOut()}>LogOut</Button>;
+   return <Button onClick={() => handleOut()}>Cerrar Session</Button>;
 };
 export default LogoutButton;
