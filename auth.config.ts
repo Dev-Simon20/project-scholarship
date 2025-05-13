@@ -10,9 +10,10 @@ export default {
         password: {},
       },
          authorize: async (credentials) => {
-            if (credentials.email !== "text@text.com") {
+            if (credentials.email !== "test@unac.edu.pe") {
                throw new Error("invalid credentials");
             }
+            
             const user: { id: string; name: string; email: string } = {
                id: "1",
                name: "Jeampeirl",
