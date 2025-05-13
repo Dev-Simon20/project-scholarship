@@ -15,8 +15,12 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import Headerform from "../header_form/header_form";
 import { Button } from "../ui/button";
+import { useTransition } from "react";
+import { registerAction } from "@/actions/auth-actions";
+import { toast } from "sonner";
 
 const FormSignin = () => {
+   const [isPending, startTransition] = useTransition();
    const form = useForm<z.infer<typeof signInValidateSchema>>({
       resolver: zodResolver(signInValidateSchema),
       defaultValues: {
@@ -27,12 +31,35 @@ const FormSignin = () => {
          email: "",
          password: "",
          phone_number: "",
+         passwordConfirmed: "",
       },
    });
 
-   function onSubmit(values: z.infer<typeof signInValidateSchema>) {
+   const onSubmit = (values: z.infer<typeof signInValidateSchema>) => {
       console.log(values);
-   }
+      startTransition(async () => {
+         try {
+            const register = await registerAction(values);
+            if (register.error) {
+               throw new Error(register.error);
+            }
+            toast.success("Registro exitoso", {
+               description:"El usuario fue registrado exitosamente",
+               action: {
+                  label: "Log In",
+                  onClick: () => console.log("Undo"),
+               },
+            });
+         } catch (error) {
+            if (error instanceof Error) {
+               toast.error(error.message);
+            }
+         }
+      });
+   };
+   const showToast = () => {
+      toast.success("Event has been created");
+   };
    return (
       <Card className="w-[650px] pt-0 overflow-hidden text-neutral-700 dark:text-white border-0 outline-0">
          <Headerform

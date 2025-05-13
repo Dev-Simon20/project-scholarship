@@ -76,7 +76,7 @@ const FormLogin = () => {
                                  <Mail className="h-4 w-4" />
                               </div>
                               <Input
-                                 placeholder="example@correo.com"
+                                 placeholder="example@unac.edu.pe"
                                  {...field}
                                  className="pl-9 h-11"
                                  disabled={isPending}

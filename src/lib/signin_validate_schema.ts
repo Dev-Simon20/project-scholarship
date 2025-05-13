@@ -1,13 +1,3 @@
-/**
- * Nombres -Names
- * Apellido Materno -first-lastmane
- * Apellido Paterno -second-lastName
- * Codigo de la univerisdad -code-university
- * Número de contacto -contact-number
- * Correo electronico de la unac -email
- * contraseña                    -password
- */
-
 import { object, string, z } from "zod";
 
 export const validatePasswordSchema = z

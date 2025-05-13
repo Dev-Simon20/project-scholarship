@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavigationMenuDemo } from "@/components/menu-custom/menu-custom";
 import ButtonDarkMode from "@/components/button-dark-mode/button-dark-mode";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -31,7 +32,8 @@ export default function RootLayout({
          >
             <ButtonDarkMode />
 
-            {children}
+            <main>{children}</main>
+            <Toaster position="top-right" richColors closeButton/>
          </body>
       </html>
    );
