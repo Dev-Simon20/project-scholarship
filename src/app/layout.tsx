@@ -4,6 +4,7 @@ import "./globals.css";
 import { NavigationMenuDemo } from "@/components/menu-custom/menu-custom";
 import ButtonDarkMode from "@/components/button-dark-mode/button-dark-mode";
 import { Toaster } from "sonner";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
          >
             <ButtonDarkMode />
 
-            <main>{children}</main>
-            <Toaster position="top-right" richColors closeButton/>
+            <main>
+               <SessionProvider>{children}</SessionProvider>
+            </main>
+            <Toaster position="top-right" richColors closeButton />
          </body>
       </html>
    );
