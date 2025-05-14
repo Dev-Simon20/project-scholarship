@@ -8,6 +8,7 @@ import { signInValidateSchema } from "@/lib/signin_validate_schema";
 import { prismaDb } from "@/lib/db";
 import bcrypt from "bcryptjs";
 export const logInAction = async (values: z.infer<typeof logInSchema>) => {
+
    try {
       await signIn("credentials", {
          email: values.email,
@@ -19,7 +20,12 @@ export const logInAction = async (values: z.infer<typeof logInSchema>) => {
       if (error instanceof AuthError) {
          return { error: error.cause?.err?.message };
       }
-      return { error: "error 500" };
+      if (error instanceof Error) {
+         return {
+            error: error.message,
+         };
+      }
+      return { error: "Error desconosido " };
    }
 };
 
