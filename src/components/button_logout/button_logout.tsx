@@ -6,7 +6,7 @@ const LogoutButton = () => {
    const handleOut = async () => {
       await signOut({
          redirect: true,
-         redirectTo: "/projects/my-little-shop/login",
+         redirectTo: "/log-in",
       });
    };
    return <Button onClick={() => handleOut()}>Cerrar Session</Button>;

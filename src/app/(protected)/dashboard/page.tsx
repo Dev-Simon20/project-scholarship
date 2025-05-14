@@ -8,6 +8,7 @@ export default async function DashboardPage() {
       <div className="container">
          <pre>{JSON.stringify(session, null, 2)}</pre>
          <LogoutButton />
+         
       </div>
    );
 }
