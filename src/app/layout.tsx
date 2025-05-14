@@ -32,7 +32,6 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-neutral-700 bg-gray-100 text-neutral-700 dark:text-white`}
          >
             <ButtonDarkMode />
-
             <main>
                <SessionProvider>{children}</SessionProvider>
             </main>

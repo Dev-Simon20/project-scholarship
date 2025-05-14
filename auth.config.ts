@@ -19,15 +19,16 @@ export default {
             }
             const user = await prismaDb.user.findUnique({
                where: {
-                  email: data.email,
+                  email: data.email.toLowerCase(),
                },
             });
+            console.log(user);
+            
             if (!user || !user.password) {
                throw new Error("No user found");
             }
 
             const isvalid = await bcrypt.compare(data.password, user.password);
-
             if (!isvalid) {
                throw new Error("Incorrect oassword");
             }
