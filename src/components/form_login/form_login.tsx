@@ -25,11 +25,12 @@ import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
 import { logInAction } from "@/actions/auth-actions";
 import Headerform from "../header_form/header_form";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const FormLogin = () => {
    const [hiddenPassword, setHiddenPassword] = useState(true);
-   const [error, setError] = useState<string | null>(null);
-
+   const router=useRouter();
    const form = useForm<z.infer<typeof logInSchema>>({
       resolver: zodResolver(logInSchema),
       defaultValues: {
@@ -42,14 +43,12 @@ const FormLogin = () => {
 
    function onSubmit(values: z.infer<typeof logInSchema>) {
       startTransition(async () => {
-         let errorTemp: string | null = null;
          const response = await logInAction(values);
          if (response.error) {
-            errorTemp = response.error;
+             toast.error(response.error)
          } else {
+            toast.success("El login fue exitoso")
          }
-         setError(errorTemp);
-         console.log(response);
       });
    }
 
