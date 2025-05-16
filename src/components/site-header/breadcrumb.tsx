@@ -30,15 +30,17 @@ function generarRutas(url: string): Ruta[] {
    });
 }
 
-const Breadcum = () => {
-   const pathname = usePathname();   
-   const roots = generarRutas(pathname).slice(2);
+const BreadcrumbCustomize = () => {
+   const pathname = usePathname();
+   console.log(pathname);
+
+   const roots = generarRutas(pathname);
 
    return (
       <Breadcrumb>
          <BreadcrumbList className="gap-0">
             {roots.map((ruta, index) => (
-               <Fragment key={index} >
+               <Fragment key={index}>
                   <BreadcrumbItem className="">
                      {index !== roots.length - 1 ? (
                         <BreadcrumbLink href={ruta.path}>
@@ -55,4 +57,4 @@ const Breadcum = () => {
       </Breadcrumb>
    );
 };
-export default Breadcum;
+export default BreadcrumbCustomize;
