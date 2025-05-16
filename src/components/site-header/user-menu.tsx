@@ -1,4 +1,4 @@
-import { CircleUserRound, Sun, User, User2Icon } from "lucide-react";
+import { AlertTriangle, Check, CircleUserRound, Info, Sun, User, User2Icon, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
    DropdownMenu,
@@ -14,9 +14,9 @@ const UserMenu = ({ names }: { names: string }) => {
       <DropdownMenu>
          <DropdownMenuTrigger className="flex items-center gap-1" asChild>
             <Button
-               variant={"ghost"}
+               variant={"outline"}
                size={"icon"}
-               className="uppercase  bg-gray-200 hover:bg-gray-200 dark:bg-neutral-900 cursor-pointer !text-[#ff6a00] hover:text-[#ff6a00]"
+               className="uppercase rounded-full"
             >
                {letter}
             </Button>

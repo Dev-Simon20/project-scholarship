@@ -19,8 +19,8 @@ export default async function SchoolDashboardLayout({
    return (
       <SidebarProvider>
          <AppSidebar variant="inset" />
-         <SidebarInset >
-            <SiteHeader />
+         <SidebarInset>
+            <SiteHeader id={session.user.id} names={session.user.names} />
             {children}
          </SidebarInset>
       </SidebarProvider>

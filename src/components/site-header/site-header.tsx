@@ -3,8 +3,13 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import ButtonDarkMode from "../button-dark-mode/button-dark-mode";
 import BreadcrumbCustomize from "./breadcrumb";
 import UserMenu from "./user-menu";
+import Notifications from "./notifications";
 
-export function SiteHeader() {
+interface PropsSiteHeader {
+   names: string;
+   id: string;
+}
+export function SiteHeader({ names, id }: PropsSiteHeader) {
    return (
       <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear justify-between ">
          <div className="flex items-center gap-2 px-4">
@@ -15,9 +20,11 @@ export function SiteHeader() {
             />
             <BreadcrumbCustomize />
          </div>
-         <div className="flex items-center gap-2  px-4">
+         <div className="flex items-center gap-4  px-4">
             <ButtonDarkMode />
-            <UserMenu names="hugo jeampierk"/>
+            <Notifications id={id} />
+
+            <UserMenu names={names} />
          </div>
       </header>
    );
