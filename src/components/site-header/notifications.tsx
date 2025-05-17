@@ -15,13 +15,13 @@ import { NotificationType, Notification } from "@/types/notificaction";
 
 const getIcon = (type: NotificationType) => {
    switch (type) {
-      case "success":
+      case NotificationType.success:
          return <Check className="h-4 w-4 text-green-500" />;
-      case "error":
+      case NotificationType.error:
          return <X className="h-4 w-4 text-red-500" />;
-      case "info":
+      case NotificationType.info:
          return <Info className="h-4 w-4 text-blue-500" />;
-      case "warning":
+      case NotificationType.warning:
          return <AlertTriangle className="h-4 w-4 text-amber-500" />;
    }
 };

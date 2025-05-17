@@ -1,5 +1,5 @@
 // types/notification.d.ts
-export type NotificationType = "success" | "error" | "info" | "warning";
+export enum NotificationType { success , error, info, warning};
 
 export interface Notification {
   id: string;
