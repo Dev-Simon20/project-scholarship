@@ -23,7 +23,7 @@ import { Eye, EyeClosed, GraduationCap, Mail, ShoppingBag } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
-import { logInAction } from "@/actions/auth-actions";
+import { logInAuth } from "@/actions/auth/logIn";
 import Headerform from "../header_form/header_form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -43,7 +43,7 @@ const FormLogin = () => {
 
    function onSubmit(values: z.infer<typeof logInSchema>) {
       startTransition(async () => {
-         const response = await logInAction(values);
+         const response = await logInAuth(values);
          if (response.error) {
              toast.error(response.error)
          } else {

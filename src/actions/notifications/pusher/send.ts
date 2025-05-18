@@ -5,7 +5,7 @@ import { pusherServer } from "@/lib/pusher";
 import { auth } from "@nextAuth/auth";
 import { NotificationType } from "@prisma/client";
 // Función para crear una notificación
-export const sendMessage = async (toUserId: string,message:string,title:string,type:NotificationType) => {
+export const sendNotification = async (toUserId: string,message:string,title:string,type:NotificationType) => {
    try {
       
       const session = await auth();

@@ -3,7 +3,7 @@ import { prismaDb } from "@/lib/db";
 import { auth } from "@nextAuth/auth"
 import { AuthError } from "next-auth";
 
-export const me_notifications=async()=>{
+export const getAllNotifications=async()=>{
 
     try {
         const session= await auth();

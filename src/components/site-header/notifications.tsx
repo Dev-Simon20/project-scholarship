@@ -12,7 +12,7 @@ import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import { mockNotifications } from "@/mocks/notifications";
 import { Notification } from "@/types/notificaction";
-import { me_notifications } from "@/actions/user/me_notifications";
+import { getAllNotifications } from "@/actions/notifications/getAll";
 import { NotificationType } from "@prisma/client";
 import { pusherClient } from "@/lib/pusher";
 
@@ -48,8 +48,8 @@ const Notifications = ({ id }: { id: string }) => {
       setNotifications(notifications.filter((n) => n.id !== id));
    };
 
-   const getNotifications = async () => {
-      const res = await me_notifications();
+   const fetchNotifications = async () => {
+      const res = await getAllNotifications();
       if ("error" in res) {
          console.error("Error al obtener las notificaciones", res.error);
       } else {
@@ -58,7 +58,7 @@ const Notifications = ({ id }: { id: string }) => {
    };
 
    useEffect(() => {
-      getNotifications();
+      fetchNotifications();
       pusherClient.subscribe(`private-user-${id}`);
       pusherClient.bind("new-notification", (noti: { noti: Notification }) => {
          setNotifications((prev) => [noti.noti, ...prev]);

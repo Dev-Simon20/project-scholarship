@@ -16,7 +16,7 @@ import { Input } from "../ui/input";
 import Headerform from "../header_form/header_form";
 import { Button } from "../ui/button";
 import { useTransition } from "react";
-import { registerAction } from "@/actions/auth-actions";
+import { registerAuth } from "@/actions/auth/register";
 import { toast } from "sonner";
 
 const FormSignin = () => {
@@ -39,7 +39,7 @@ const FormSignin = () => {
       console.log(values);
       startTransition(async () => {
          try {
-            const register = await registerAction(values);
+            const register = await registerAuth(values);
             if (register.error) {
                throw new Error(register.error);
             }

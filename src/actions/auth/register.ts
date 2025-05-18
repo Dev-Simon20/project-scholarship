@@ -1,35 +1,12 @@
 "use server";
 
 import { z } from "zod";
-import { logInSchema } from "@/lib/login_validate_schema";
 import { AuthError } from "next-auth";
-import { signIn } from "@nextAuth/auth";
 import { signInValidateSchema } from "@/lib/signin_validate_schema";
 import { prismaDb } from "@/lib/db";
 import bcrypt from "bcryptjs";
-export const logInAction = async (values: z.infer<typeof logInSchema>) => {
 
-   try {
-      await signIn("credentials", {
-         email: values.email,
-         password: values.password,
-         redirect: false,
-      });
-      return { success: true };
-   } catch (error) {
-      if (error instanceof AuthError) {
-         return { error: error.cause?.err?.message };
-      }
-      if (error instanceof Error) {
-         return {
-            error: error.message,
-         };
-      }
-      return { error: "Error desconosido " };
-   }
-};
-
-export const registerAction = async (
+export const registerAuth = async (
    values: z.infer<typeof signInValidateSchema>
 ) => {
    const { success, data } = signInValidateSchema.safeParse(values);

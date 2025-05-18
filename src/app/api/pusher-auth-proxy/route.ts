@@ -1,6 +1,6 @@
 // src/app/api/pusher-auth-proxy/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { authenticatePusher } from "@/actions/pusherAuth";
+import { authenticatePusher } from "@/actions/notifications/pusher/authenticate";
 
 // Esta ruta es el endpoint que se agrega al crear el pusher Client en ./pusherAuth
 export async function POST(req: NextRequest) {
