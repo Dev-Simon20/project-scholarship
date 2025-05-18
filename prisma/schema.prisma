@@ -1,34 +1,149 @@
 generator client {
   provider = "prisma-client-js"
-
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
 enum Role {
   user
   admin
 }
+
+enum NotificationType {
+  success
+  error
+  info
+  warning
+}
+
+enum UserUploadStatus {
+  pending
+  in_progress
+  completed
+}
+
+enum AdminReviewStatus {
+  pending
+  in_review
+  approved
+  rejected
+  changes_requested
+}
+
+enum ReviewStatus {
+  Pending
+  Approved
+  NeedsChanges
+}
+
+enum DocumenType {
+  image
+  video
+  document
+}
+
+enum AllowedFileTypes {
+  // Imágenes
+  jpg
+  jpeg
+  png
+  gif
+  svg
+  webp
+  // Documentos
+  pdf
+  doc
+  docx
+  txt
+  // Videos
+  mp4
+  mov
+  avi
+  mkv
+  webm
+}
+
 model User {
-  id            String    @id @default(cuid())
-  names          String
-  first_lastname String
+  id              String    @id @default(cuid())
+  names           String
+  first_lastname  String
   second_lastname String
   code_university String
-  phone_number String
-  email         String    @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(user)
+  phone_number    String
+  email           String    @unique
+  password        String?
+  emailVerified   DateTime?
+  image           String?
+  role            Role      @default(user)
 
-  accounts Account[]
+  accounts              Account[]
+  notifications         Notification[]
+  scholarship_processes ScholarshipProcess[]
+  user_process          UserProcess[]
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Notification {
+  id         Int              @id @default(autoincrement())
+  user_id    String
+  tille      String
+  message    String
+  type       NotificationType
+  created_at DateTime         @default(now())
+  read       Boolean
+  user       User             @relation(fields: [user_id], references: [id])
+}
+
+model ScholarshipProcess {
+  id             Int           @id @default(autoincrement())
+  created_by     String
+  title          String
+  sub_title      String
+  comment        String
+  steps_count    Int
+  open_date      DateTime
+  close_date     DateTime
+  user           User          @relation(fields: [created_by], references: [id])
+  user_processes UserProcess[]
+  requirements   Requirement[]
+}
+
+model UserProcess {
+  id                   Int                @id @default(autoincrement())
+  user_id              String
+  process_id           Int
+  user_upload_status   UserUploadStatus
+  admin_review_status  AdminReviewStatus
+  user                 User               @relation(fields: [user_id], references: [id])
+  sccholarship_process ScholarshipProcess @relation(fields: [process_id], references: [id])
+  user_documents       UserDocument[]
+}
+
+model Requirement {
+  id                   Int                @id @default(autoincrement())
+  process_id           Int
+  title                String
+  sub_title            String
+  step_number          Int
+  max_size_mb          String
+  document_type        DocumenType
+  allowed_file_types   AllowedFileTypes[]
+  sccholarship_process ScholarshipProcess @relation(fields: [process_id], references: [id])
+  user_documents       UserDocument[]
+}
+
+model UserDocument {
+  id              Int          @id @default(autoincrement())
+  user_process_id Int
+  requirement_id  Int
+  file_url        String
+  review_status   ReviewStatus
+  user_process    UserProcess  @relation(fields: [user_process_id], references: [id])
+  Requirement     Requirement  @relation(fields: [requirement_id], references: [id])
 }
 
 model Account {
