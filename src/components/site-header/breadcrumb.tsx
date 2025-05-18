@@ -32,8 +32,6 @@ function generarRutas(url: string): Ruta[] {
 
 const BreadcrumbCustomize = () => {
    const pathname = usePathname();
-   console.log(pathname);
-
    const roots = generarRutas(pathname);
 
    return (

@@ -1,11 +1,12 @@
 // types/notification.d.ts
-export enum NotificationType { success , error, info, warning};
+
+import { NotificationType } from "@prisma/client";
 
 export interface Notification {
-  id: string;
+  id: number;
   title: string;
   message: string;
   type: NotificationType;
-  time: string;
+  created_at: Date;
   read: boolean;
 }

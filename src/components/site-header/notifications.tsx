@@ -7,11 +7,14 @@ import {
    DropdownMenuItem,
    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 import { mockNotifications } from "@/mocks/notifications";
-import { NotificationType, Notification } from "@/types/notificaction";
+import { Notification } from "@/types/notificaction";
+import { me_notifications } from "@/actions/user/me_notifications";
+import { NotificationType } from "@prisma/client";
+import { pusherClient } from "@/lib/pusher";
 
 const getIcon = (type: NotificationType) => {
    switch (type) {
@@ -27,12 +30,11 @@ const getIcon = (type: NotificationType) => {
 };
 
 const Notifications = ({ id }: { id: string }) => {
-   const [notifications, setNotifications] =
-      useState<Notification[]>(mockNotifications);
+   const [notifications, setNotifications] = useState<Notification[]>([]);
 
    const unreadCount = notifications.filter((n) => !n.read).length;
 
-   const markAsRead = (id: string) => {
+   const markAsRead = (id: number) => {
       setNotifications(
          notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
       );
@@ -42,9 +44,27 @@ const Notifications = ({ id }: { id: string }) => {
       setNotifications(notifications.map((n) => ({ ...n, read: true })));
    };
 
-   const removeNotification = (id: string) => {
+   const removeNotification = (id: number) => {
       setNotifications(notifications.filter((n) => n.id !== id));
    };
+
+   const getNotifications = async () => {
+      const res = await me_notifications();
+      if ("error" in res) {
+         console.error("Error al obtener las notificaciones", res.error);
+      } else {
+         setNotifications(res);
+      }
+   };
+
+   useEffect(() => {
+      getNotifications();
+      pusherClient.subscribe(`private-user-${id}`);
+      pusherClient.bind("new-notification", (noti: { noti: Notification }) => {
+         setNotifications((prev) => [noti.noti, ...prev]);
+      });
+      return () => pusherClient.unsubscribe(`private-user-${id}`);
+   }, []);
 
    return (
       <DropdownMenu>
@@ -112,7 +132,7 @@ const Notifications = ({ id }: { id: string }) => {
                            </p>
                            <div className="flex items-center justify-between">
                               <p className="text-xs text-muted-foreground">
-                                 {notification.time}
+                                 {notification.created_at.toString()}
                               </p>
                               {!notification.read && (
                                  <Button

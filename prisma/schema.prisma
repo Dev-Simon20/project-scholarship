@@ -90,7 +90,7 @@ model User {
 model Notification {
   id         Int              @id @default(autoincrement())
   user_id    String
-  tille      String
+  title      String
   message    String
   type       NotificationType
   created_at DateTime         @default(now())
