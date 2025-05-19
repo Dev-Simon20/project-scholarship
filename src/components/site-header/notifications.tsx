@@ -15,6 +15,8 @@ import { Notification } from "@/types/notificaction";
 import { getAllNotifications } from "@/actions/notifications/getAll";
 import { NotificationType } from "@prisma/client";
 import { pusherClient } from "@/lib/pusher";
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 const getIcon = (type: NotificationType) => {
    switch (type) {
@@ -84,7 +86,7 @@ const Notifications = ({ id }: { id: string }) => {
          </DropdownMenuTrigger>
          <DropdownMenuContent
             align="end"
-            className="max-h-[400px] overflow-y-auto p-0 "
+            className="max-h-[400px] overflow-y-auto p-0 w-96"
          >
             <div className="flex flex-row items-center justify-between p-3">
                <p className="text-sm font-medium">Notificaciones</p>
@@ -132,7 +134,10 @@ const Notifications = ({ id }: { id: string }) => {
                            </p>
                            <div className="flex items-center justify-between">
                               <p className="text-xs text-muted-foreground">
-                                 {notification.created_at.toString()}
+                                 {formatDistanceToNow(notification.created_at, {
+                                    addSuffix: true,
+                                    locale: es,
+                                 })}
                               </p>
                               {!notification.read && (
                                  <Button
