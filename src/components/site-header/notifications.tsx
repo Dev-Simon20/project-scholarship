@@ -17,6 +17,7 @@ import { NotificationType } from "@prisma/client";
 import { pusherClient } from "@/lib/pusher";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { deleteNotification } from "@/actions/notifications/delete";
 
 const getIcon = (type: NotificationType) => {
    switch (type) {
@@ -46,8 +47,10 @@ const Notifications = ({ id }: { id: string }) => {
       setNotifications(notifications.map((n) => ({ ...n, read: true })));
    };
 
-   const removeNotification = (id: number) => {
+   const removeNotification = async (id: number) => {
       setNotifications(notifications.filter((n) => n.id !== id));
+      await deleteNotification(id)
+
    };
 
    const fetchNotifications = async () => {
