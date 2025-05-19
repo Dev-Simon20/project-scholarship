@@ -18,6 +18,7 @@ import { pusherClient } from "@/lib/pusher";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { deleteNotification } from "@/actions/notifications/delete";
+import { markAsReadNotification } from "@/actions/notifications/markAsRead";
 
 const getIcon = (type: NotificationType) => {
    switch (type) {
@@ -37,10 +38,11 @@ const Notifications = ({ id }: { id: string }) => {
 
    const unreadCount = notifications.filter((n) => !n.read).length;
 
-   const markAsRead = (id: number) => {
+   const markAsRead = async (id: number) => {
       setNotifications(
          notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
       );
+      await markAsReadNotification(id);
    };
 
    const markAllAsRead = () => {
@@ -49,8 +51,7 @@ const Notifications = ({ id }: { id: string }) => {
 
    const removeNotification = async (id: number) => {
       setNotifications(notifications.filter((n) => n.id !== id));
-      await deleteNotification(id)
-
+      await deleteNotification(id);
    };
 
    const fetchNotifications = async () => {
@@ -105,13 +106,16 @@ const Notifications = ({ id }: { id: string }) => {
                )}
             </div>
             {notifications.length > 0 ? (
-               <div className="divide-y">
+               <div className="divide-y ">
                   {notifications.map((notification) => (
                      <div
                         key={notification.id}
+                        //si la notificacion esta definidad como no leida(false)
+                        //entonces sera color bg-muted/30 que la define shadcn como un blanco pastel a solo el 30%
+                        //cuando se hace hoverapsa a 50%
                         className={cn(
-                           "flex items-start gap-3 p-3 hover:bg-muted/50 transition-colors",
-                           !notification.read && "bg-muted/30"
+                           "flex items-start gap-3 p-3  hover:bg-gray-200/80  transition-colors",
+                           !notification.read && "bg-gray-100"
                         )}
                      >
                         <div className="mt-1">{getIcon(notification.type)}</div>

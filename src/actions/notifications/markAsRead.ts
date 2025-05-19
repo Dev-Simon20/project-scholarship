@@ -1,32 +1,27 @@
 'use server'
+
 import { prismaDb } from "@/lib/db";
 import { auth } from "@nextAuth/auth"
 import { AuthError } from "next-auth";
 
-export const getAllNotifications=async()=>{
-
+export const markAsReadNotification=async(id:number)=>{
     try {
-        const session= await auth();
+        const session=await auth();
         const user_id=session?.user.id;
         if(!user_id){
-            throw new Error('El usario no existe')
+            throw new Error('The session dont exist')
         }
-
-        const notification=await prismaDb.notification.findMany({
+        await prismaDb.notification.update({
             where:{
-                user_id:user_id
+                id:id
             },
-            orderBy:{
-                created_at:'asc'
+            data:{
+                read:true
             }
         })
 
-        return notification.reverse()
-
     } catch (error) {
-        console.log('el errors es: ',error);
-        
-        if(error instanceof  AuthError){
+        if(error instanceof AuthError){
             return{
                 error:error.cause?.err?.message
             }
@@ -37,8 +32,7 @@ export const getAllNotifications=async()=>{
             }
         }
         return{
-            error:"Error desconocido"
+            error:'Error unknow'
         }
     }
-    
 }
