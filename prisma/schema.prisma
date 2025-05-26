@@ -73,6 +73,8 @@ model User {
   second_lastname String
   code_university String
   phone_number    String
+  // facultad
+  //escuela
   email           String    @unique
   password        String?
   emailVerified   DateTime?

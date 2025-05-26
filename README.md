@@ -1,3 +1,23 @@
+## Modelado del Sistema
+
+### Requerimiento del sistema
+
+-  Requerimientos funcionales
+   | Código | Requerimiento funcional | Prioridad |
+   |--------|-------------------------------------------------------------------------------------------------------------|-----------|
+   | RF 1 | El sistema debe mostrar una pantalla de inicio de sesión. | Alta |
+   | RF 2 | El sistema debe mostrar un panel principal tras el inicio de sesión. | Alta |
+   | RF 3 | El sistema debe permitir al administrador crear procesos de beca. | Alta |
+   | RF 4 | El sistema debe permitir al administrador editar el proceso solo si aún no hay alumnos registrados. | Alta |
+   | RF 5 | El sistema debe mostrar al administrador una pantalla con una tabla de los inscritos a su proceso de beca.| Alta |
+   | RF 6 | El sistema debe permitir al administrador cambiar el estado del proceso de una postulación a aprobado, rechazado o necesita cambios.| Alta |
+   | RF 7 | El sistema debe permitir al administrador cambiar el estado de revisión de un documento del proceso de un alumno.| Alta |
+   | RF 8 | El sistema debe permitir al usuario ver los procesos de becas disponibles. | Alta |
+   | RF 9 | El sistema debe permitir al usuario inscribirse a un proceso de beca. | Alta |
+   | RF 10 | El sistema debe permitir al usuario subir los documentos necesarios para cumplir con el proceso de beca.| Alta |
+    | RF 11 | El sistema debe permitir al usuario corregir su proceso si el administrador asi lo indica.| Alta |
+
+
 ## Authenticación con Auth.js
 
 <https://authjs.dev/>
@@ -121,7 +141,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
    import authConfig from "./auth.config"
    export const {auth:middleware} = NextAuth(authConfig)
    ```
-- Agregamos el matcher para el middelware.ts
+-  Agregamos el matcher para el middelware.ts
    ```bash
    export const config = {
       matcher:["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
@@ -192,21 +212,22 @@ model VerificationToken {
   @@id([identifier])
 }
 ```
+
 </details>
 
 -  Crear la base de datos postgresSQL haciendo uso de pgadmin4, **No hacer nada más**
--  Editamos la variable de entorno de la conexion ala base de datos que se habia creado con ***npx prisma init*** 
+-  Editamos la variable de entorno de la conexion ala base de datos que se habia creado con **_npx prisma init_**
    ```bash
    #DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
    DATABASE_URL="postgresql://postgres:4545@localhost:5432/scholarships?schema=public"
    ```
-- Ejecutamos los siguiente comandos:
+-  Ejecutamos los siguiente comandos:
    ```bash
    npx prisma generate
    #Luego
    npx prisma db push
    ```
-- Con eso ya estaria creado la base de datos regresca pg admin para ver los cambios
+-  Con eso ya estaria creado la base de datos regresca pg admin para ver los cambios
 
 ### 7- Configuramos el metodo de autenticacion [Credenciales](https://authjs.dev/getting-started/authentication/credentials)
 
@@ -242,4 +263,3 @@ export default {
    ],
 } satisfies NextAuthConfig;
 ```
-
