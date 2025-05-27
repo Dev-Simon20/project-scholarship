@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NavigationMenuDemo } from "@/components/menu-custom/menu-custom";
 import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import { cookies } from "next/headers";
-
-const geistSans = Geist({
-   variable: "--font-geist-sans",
-   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-   variable: "--font-geist-mono",
-   subsets: ["latin"],
-});
+import { geistMono, geistSans, roboto_slab } from "@/lib/fonts";
 
 export const metadata: Metadata = {
    title: "ScholarShip",
@@ -31,7 +20,7 @@ export default async function RootLayout({
    return (
       <html lang="en" className={theme === "dark" ? "dark" : ""}>
          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-neutral-700 bg-gray-100 text-neutral-700 dark:text-white`}
+            className={`${geistSans.variable} ${geistMono.variable} ${roboto_slab.variable} antialiased dark:bg-neutral-700 bg-gray-100 text-neutral-700 dark:text-white`}
          >
             <main>
                <SessionProvider>{children}</SessionProvider>

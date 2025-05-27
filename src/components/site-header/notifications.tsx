@@ -114,8 +114,11 @@ const Notifications = ({ id }: { id: string }) => {
                         //entonces sera color bg-muted/30 que la define shadcn como un blanco pastel a solo el 30%
                         //cuando se hace hoverapsa a 50%
                         className={cn(
-                           "flex items-start gap-3 p-3  hover:bg-gray-200/80  transition-colors",
-                           !notification.read && "bg-gray-100"
+                           "flex items-start gap-3 p-3 transition-colors",
+                           "hover:bg-gray-200/80 dark:hover:bg-white/10", 
+                           !notification.read
+                              ? "bg-gray-100 dark:bg-[#957f7f21]" 
+                              : "bg-white dark:bg-transparent" 
                         )}
                      >
                         <div className="mt-1">{getIcon(notification.type)}</div>

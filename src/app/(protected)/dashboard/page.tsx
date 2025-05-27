@@ -7,7 +7,22 @@ export default async function DashboardPage() {
    const session = await auth();
    if (!session) redirect("/log-in");
    return (
-      <div className="container">
+      <div className="container bg-amber-600 flex flex-col items-center">
+         <div className="self-start text-2xl ">
+            Hola, { session.user.names}
+         </div>
+         <div className="self-start text-2xl font-geist">
+            Hola, { session.user.names}
+         </div>
+         <div className="self-start text-2xl font-slab font-semibold ">
+            Hola, { session.user.names}
+         </div>
+         <div className="self-start  text-2xl font-mono">
+            Hola, { session.user.names}
+         </div>
+         <article className="grid">
+
+         </article>
          <pre>{JSON.stringify(session, null, 2)}</pre>
          <LogoutButton />
          <ButtonDemoNotification/>
