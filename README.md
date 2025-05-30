@@ -22,6 +22,36 @@
 
 <https://authjs.dev/>
 
+## Estructura del proyecto
+
+```plaintext
+📂 proyecto-becas-de-alimentos/
+ ┣ 📂 src/
+ ┃ ┣ 📂 app/
+ ┃ ┃ ┣ 📂 login/          ← Vista de inicio de sesión
+ ┃ ┃ ┣ 📂 signin/          ← Vista de inicio de sesión
+ ┃ ┃ ┣ 📂 dashboard/      ← Panel principal del estudiante
+ ┃ ┃ ┣ 📂 profile/        ← Perfil del usuario
+ ┃ ┃ ┗ 📜 layout.tsx      ← Estructura general de la app
+ ┃ ┣ 📂 api/
+ ┃ ┃ ┣ 📂 auth/           ← Módulo de autenticación
+ ┃ ┃ ┣ 📂 becas/          ← Endpoints para gestión de becas
+ ┃ ┃ ┣ 📂 solicitudes/    ← Endpoints para envío de solicitudes
+ ┃ ┃ ┗ 📜 index.ts
+ ┃ ┣ 📂 lib/
+ ┃ ┃ ┣ 📜 validators.ts   ← Validaciones de formularios
+ ┃ ┃ ┣ 📜 auth.config.ts  ← Configuración de autenticación
+ ┃ ┃ ┗ 📜 prisma.ts       ← Conexión a la base de datos
+ ┣ 📂 prisma/
+ ┃ ┗ 📜 schema.prisma     ← Definición del modelo de datos
+ ┣ 📜 tsconfig.json
+ ┣ 📜 package.json
+ ┣ 📜 .env
+ ┗ 📜 README.md
+```
+
+
+
 ### 1- Instalación
 
 ```

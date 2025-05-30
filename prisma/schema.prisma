@@ -10,6 +10,7 @@ datasource db {
 enum Role {
   user
   admin
+  social_worker
 }
 
 enum NotificationType {
@@ -19,20 +20,25 @@ enum NotificationType {
   warning
 }
 
-enum UserUploadStatus {
+// estado de subida de docuemntos del estudiante
+enum StudentUploadStatus {
   pending
   in_progress
   completed
 }
 
-enum AdminReviewStatus {
+// estado del proceso
+enum SocialWorkerReviewStatus {
   pending
   in_review
+  to_be_interviewed
+  interviewed
   approved
   rejected
   changes_requested
 }
 
+// esatdo de un solo documento
 enum ReviewStatus {
   Pending
   Approved
@@ -71,22 +77,60 @@ model User {
   names           String
   first_lastname  String
   second_lastname String
-  code_university String
   phone_number    String
-  // facultad
-  //escuela
   email           String    @unique
   password        String?
   emailVerified   DateTime?
   image           String?
   role            Role      @default(user)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  accounts              Account[]
-  notifications         Notification[]
-  scholarship_processes ScholarshipProcess[]
-  user_process          UserProcess[]
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
+  accounts      Account[]
+  notifications Notification[]
+  students      Student[]
+  Admins        Admin[]
+  SocialWorkers SocialWorker[]
+}
+
+model Student {
+  user_id             String        @id
+  user                User          @relation(fields: [user_id], references: [id])
+  code_university     String
+  school_id           Int
+  enrrolled_semesters String
+  user_process        UserProcess[]
+  school              School        @relation(fields: [school_id], references: [id])
+}
+
+model Faculty {
+  id           Int            @id @default(autoincrement())
+  name         String
+  schools      School[]
+  socialWorker SocialWorker[]
+}
+
+model School {
+  id         Int       @id @default(autoincrement())
+  faculty_id Int
+  name       String
+  faculty    Faculty   @relation(fields: [faculty_id], references: [id])
+  students   Student[]
+}
+
+model Admin {
+  user_id               String               @id
+  user                  User                 @relation(fields: [user_id], references: [id])
+  management_start_date DateTime             @default(now())
+  scholarship_process   ScholarshipProcess[]
+}
+
+model SocialWorker {
+  user_id             String        @id
+  user                User          @relation(fields: [user_id], references: [id])
+  assigned_faculties  Faculty[]
+  employment_start_date DateTime      @default(now())
+  user_process        UserProcess[]
 }
 
 model Notification {
@@ -109,20 +153,22 @@ model ScholarshipProcess {
   steps_count    Int
   open_date      DateTime
   close_date     DateTime
-  user           User          @relation(fields: [created_by], references: [id])
+  admin          Admin         @relation(fields: [created_by], references: [user_id])
   user_processes UserProcess[]
   requirements   Requirement[]
 }
 
 model UserProcess {
-  id                   Int                @id @default(autoincrement())
-  user_id              String
-  process_id           Int
-  user_upload_status   UserUploadStatus
-  admin_review_status  AdminReviewStatus
-  user                 User               @relation(fields: [user_id], references: [id])
-  sccholarship_process ScholarshipProcess @relation(fields: [process_id], references: [id])
-  user_documents       UserDocument[]
+  id                          Int                      @id @default(autoincrement())
+  student_id                  String
+  social_worker_id            String
+  sccholarship_process_id                  Int
+  student_upload_status       StudentUploadStatus
+  social_worker_review_status SocialWorkerReviewStatus
+  student                     Student                  @relation(fields: [student_id], references: [user_id])
+  sccholarship_process        ScholarshipProcess       @relation(fields: [sccholarship_process_id], references: [id])
+  social_worker               SocialWorker             @relation(fields: [social_worker_id], references: [user_id])
+  user_documents              UserDocument[]
 }
 
 model Requirement {
