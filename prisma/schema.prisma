@@ -99,7 +99,7 @@ model Student {
   code_university     String
   school_id           Int
   enrrolled_semesters String
-  user_process        UserProcess[]
+  student_processes        StudentProcess[]
   school              School        @relation(fields: [school_id], references: [id])
 }
 
@@ -107,7 +107,7 @@ model Faculty {
   id           Int            @id @default(autoincrement())
   name         String
   schools      School[]
-  socialWorker SocialWorker[]
+  social_workers SocialWorker[]
 }
 
 model School {
@@ -122,7 +122,7 @@ model Admin {
   user_id               String               @id
   user                  User                 @relation(fields: [user_id], references: [id])
   management_start_date DateTime             @default(now())
-  scholarship_process   ScholarshipProcess[]
+  scholarship_processes   ScholarshipProcess[]
 }
 
 model SocialWorker {
@@ -130,7 +130,7 @@ model SocialWorker {
   user                  User          @relation(fields: [user_id], references: [id])
   assigned_faculties    Faculty[]
   employment_start_date DateTime      @default(now())
-  user_process          UserProcess[]
+  student_processes          StudentProcess[]
 }
 
 model Notification {
@@ -154,11 +154,11 @@ model ScholarshipProcess {
   open_date      DateTime
   close_date     DateTime
   admin          Admin         @relation(fields: [created_by], references: [user_id])
-  user_processes UserProcess[]
+  student_processes StudentProcess[]
   requirements   Requirement[]
 }
 
-model UserProcess {
+model StudentProcess {
   id                          Int                      @id @default(autoincrement())
   student_id                  String
   social_worker_id            String
@@ -168,7 +168,7 @@ model UserProcess {
   student                     Student                  @relation(fields: [student_id], references: [user_id])
   sccholarship_process        ScholarshipProcess       @relation(fields: [sccholarship_process_id], references: [id])
   social_worker               SocialWorker             @relation(fields: [social_worker_id], references: [user_id])
-  user_documents              UserDocument[]
+  student_documents           StudentDocument[]
 }
 
 model Requirement {
@@ -181,16 +181,16 @@ model Requirement {
   document_type        DocumenType
   allowed_file_types   AllowedFileTypes[]
   sccholarship_process ScholarshipProcess @relation(fields: [process_id], references: [id])
-  user_documents       UserDocument[]
+  student_documents       StudentDocument[]
 }
 
-model UserDocument {
+model StudentDocument {
   id              Int          @id @default(autoincrement())
-  user_process_id Int
+  student_process_id Int
   requirement_id  Int
   file_url        String
   review_status   ReviewStatus
-  user_process    UserProcess  @relation(fields: [user_process_id], references: [id])
+  student_process    StudentProcess  @relation(fields: [student_process_id], references: [id])
   Requirement     Requirement  @relation(fields: [requirement_id], references: [id])
 }
 
