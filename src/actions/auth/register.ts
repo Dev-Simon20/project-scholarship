@@ -31,10 +31,17 @@ export const registerAuth = async (
             second_lastname: data.second_lastname,
             phone_number: data.phone_number,
             email: data.email.toLowerCase(),
-            code_university: data.code_university,
             password: passwordHash,
          },
       });
+      // await prismaDb.student.create({
+      //    data:{
+      //       user_id:getUser.id,
+      //       school_id:0,
+      //       enrrolled_semesters:'10',
+      //       code_university:'1815260049'
+      //    }
+      // })
       return {
          success: true,
       };

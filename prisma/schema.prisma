@@ -8,7 +8,7 @@ datasource db {
 }
 
 enum Role {
-  user
+  student
   admin
   social_worker
 }
@@ -82,7 +82,7 @@ model User {
   password        String?
   emailVerified   DateTime?
   image           String?
-  role            Role      @default(user)
+  role            Role      @default(student)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -126,11 +126,11 @@ model Admin {
 }
 
 model SocialWorker {
-  user_id             String        @id
-  user                User          @relation(fields: [user_id], references: [id])
-  assigned_faculties  Faculty[]
+  user_id               String        @id
+  user                  User          @relation(fields: [user_id], references: [id])
+  assigned_faculties    Faculty[]
   employment_start_date DateTime      @default(now())
-  user_process        UserProcess[]
+  user_process          UserProcess[]
 }
 
 model Notification {
@@ -162,7 +162,7 @@ model UserProcess {
   id                          Int                      @id @default(autoincrement())
   student_id                  String
   social_worker_id            String
-  sccholarship_process_id                  Int
+  sccholarship_process_id     Int
   student_upload_status       StudentUploadStatus
   social_worker_review_status SocialWorkerReviewStatus
   student                     Student                  @relation(fields: [student_id], references: [user_id])

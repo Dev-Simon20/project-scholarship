@@ -20,11 +20,9 @@ export default async function RootLayout({
    return (
       <html lang="en" className={theme === "dark" ? "dark" : ""}>
          <body
-            className={`${geistSans.variable} ${geistMono.variable} ${roboto_slab.variable} antialiased dark:bg-neutral-700 bg-gray-100 text-neutral-700 dark:text-white`}
+            className={`${geistSans.variable} ${geistMono.variable} ${roboto_slab.variable} antialiased dark:bg-neutral-900 bg-gray-100 text-neutral-700 dark:text-white`}
          >
-            <main>
-               <SessionProvider>{children}</SessionProvider>
-            </main>
+            <SessionProvider>{children}</SessionProvider>
             <Toaster position="top-right" richColors closeButton />
          </body>
       </html>

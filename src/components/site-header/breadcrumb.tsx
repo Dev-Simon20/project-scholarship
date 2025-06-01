@@ -30,13 +30,13 @@ function generarRutas(url: string): Ruta[] {
    });
 }
 
-const BreadcrumbCustomize = () => {
+const BreadcrumbCustomize = ({ className }: { className?: string }) => {
    const pathname = usePathname();
    const roots = generarRutas(pathname);
 
    return (
       <Breadcrumb>
-         <BreadcrumbList className="gap-0">
+         <BreadcrumbList className={`gap-0 ${className}`}>
             {roots.map((ruta, index) => (
                <Fragment key={index}>
                   <BreadcrumbItem className="">
@@ -45,7 +45,9 @@ const BreadcrumbCustomize = () => {
                            {ruta.name}
                         </BreadcrumbLink>
                      ) : (
-                        <BreadcrumbPage>{ruta.name}</BreadcrumbPage>
+                        <BreadcrumbPage className="text-white">
+                           {ruta.name}
+                        </BreadcrumbPage>
                      )}
                   </BreadcrumbItem>
                   {index !== roots.length - 1 && <BreadcrumbSeparator />}

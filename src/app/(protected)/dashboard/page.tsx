@@ -7,7 +7,7 @@ export default async function DashboardPage() {
    const session = await auth();
    if (!session) redirect("/log-in");
    return (
-      <div className="container bg-amber-600 flex flex-col items-center">
+      <div className="container outline ">
          <div className="self-start text-2xl ">
             Hola, { session.user.names}
          </div>
