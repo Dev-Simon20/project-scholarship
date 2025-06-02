@@ -10,7 +10,7 @@ import {
 import { auth } from "@nextAuth/auth";
 import { redirect } from "next/navigation";
 
-export default async function SchoolDashboardLayout({
+export default async function ProtectedLayout({
    children,
 }: Readonly<{
    children: React.ReactNode;

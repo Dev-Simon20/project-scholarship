@@ -8,6 +8,8 @@ export default async function DashboardPage() {
    if (!session) redirect("/log-in");
    return (
       <div className="container outline ">
+
+         <h1>Aqui se veran la lista de becas</h1>
          <div className="self-start text-2xl ">
             Hola, { session.user.names}
          </div>
