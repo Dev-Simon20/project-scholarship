@@ -20,6 +20,11 @@ enum NotificationType {
   warning
 }
 
+enum SocialWorkerStatus {
+  enabled
+  disabled
+}
+
 // estado de subida de docuemntos del estudiante
 enum StudentUploadStatus {
   pending
@@ -79,6 +84,7 @@ model User {
   first_lastname  String
   second_lastname String
   phone_number    String
+  dni             String?
   email           String    @unique
   password        String?
   emailVerified   DateTime?
@@ -107,6 +113,7 @@ model Student {
 model Faculty {
   id           Int            @id @default(autoincrement())
   name         String
+  creation_date DateTime
   schools      School[]
   social_workers SocialWorker[]
 }
@@ -129,6 +136,7 @@ model Admin {
 //agregar esatdos de [enabled, disabled]
 model SocialWorker {
   user_id               String        @id
+  social_worker_status SocialWorkerStatus
   user                  User          @relation(fields: [user_id], references: [id])
   assigned_faculties    Faculty[]
   employment_start_date DateTime      @default(now())
