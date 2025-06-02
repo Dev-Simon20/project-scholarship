@@ -30,27 +30,37 @@ function generarRutas(url: string): Ruta[] {
    });
 }
 
-const BreadcrumbCustomize = ({ className }: { className?: string }) => {
+interface PropsBreadcrumbList{
+   classNameBreadList?:string
+   classNameBreadLink?:string
+}
+
+const BreadcrumbCustomize = ({ classNameBreadList,classNameBreadLink }: PropsBreadcrumbList) => {
    const pathname = usePathname();
    const roots = generarRutas(pathname);
 
    return (
       <Breadcrumb>
-         <BreadcrumbList className={`gap-0 ${className}`}>
+         <BreadcrumbList className={`gap-0 ${classNameBreadList}`}>
             {roots.map((ruta, index) => (
                <Fragment key={index}>
                   <BreadcrumbItem className="">
                      {index !== roots.length - 1 ? (
-                        <BreadcrumbLink href={ruta.path}>
+                        <BreadcrumbLink
+                           href={ruta.path}
+                           className={`${classNameBreadLink}`}
+                        >
                            {ruta.name}
                         </BreadcrumbLink>
                      ) : (
-                        <BreadcrumbPage className="text-white">
+                        <BreadcrumbPage  className={`${classNameBreadLink}`}>
                            {ruta.name}
                         </BreadcrumbPage>
                      )}
                   </BreadcrumbItem>
-                  {index !== roots.length - 1 && <BreadcrumbSeparator />}
+                  {index !== roots.length - 1 && (
+                     <BreadcrumbSeparator className={`${classNameBreadLink}`} />
+                  )}
                </Fragment>
             ))}
          </BreadcrumbList>

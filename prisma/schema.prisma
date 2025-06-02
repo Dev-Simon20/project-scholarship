@@ -73,6 +73,7 @@ enum AllowedFileTypes {
 }
 
 model User {
+  //agregar el atributo dni
   id              String    @id @default(cuid())
   names           String
   first_lastname  String
@@ -125,6 +126,7 @@ model Admin {
   scholarship_processes   ScholarshipProcess[]
 }
 
+//agregar esatdos de [enabled, disabled]
 model SocialWorker {
   user_id               String        @id
   user                  User          @relation(fields: [user_id], references: [id])

@@ -11,9 +11,9 @@ import { Badge } from "../ui/badge";
 interface PropsSiteHeader {
    names: string;
    id: string;
-   role:string;
+   role: string;
 }
-export function SiteHeader({ names, id,role }: PropsSiteHeader) {
+export function SiteHeader({ names, id, role }: PropsSiteHeader) {
    return (
       <header className="flex h-16  items-center gap-2  justify-between bg-blue-700 w-full">
          <div className="flex items-center gap-2 px-4">
@@ -29,7 +29,10 @@ export function SiteHeader({ names, id,role }: PropsSiteHeader) {
                orientation="vertical"
                className="mx-2 data-[orientation=vertical]:h-4 hidden md:block"
             />
-            <BreadcrumbCustomize  className="hidden md:block"/>
+            <BreadcrumbCustomize
+               classNameBreadList="hidden md:flex"
+               classNameBreadLink="text-gray-300 hover:text-white"
+            />
          </div>
          <div className="flex items-center gap-4  px-4">
             <ButtonDarkMode />

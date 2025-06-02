@@ -18,9 +18,9 @@ export default async function RootLayout({
    const cookieStore = await cookies();
    const theme = cookieStore.get("theme")?.value ?? "light";
    return (
-      <html lang="en" className={theme === "dark" ? "dark" : ""}>
+      <html lang="en" className={theme === "dark" ? "dark h-full" : "h-full"}>
          <body
-            className={`${geistSans.variable} ${geistMono.variable} ${roboto_slab.variable} antialiased dark:bg-neutral-900 bg-gray-100 text-neutral-700 dark:text-white`}
+            className={`${geistSans.variable} ${geistMono.variable} ${roboto_slab.variable} antialiased dark:bg-neutral-900 bg-gray-100 text-neutral-700 dark:text-white h-full`}
          >
             <SessionProvider>{children}</SessionProvider>
             <Toaster position="top-right" richColors closeButton />

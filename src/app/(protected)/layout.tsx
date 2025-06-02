@@ -18,12 +18,18 @@ export default async function ProtectedLayout({
    const session = await auth();
    if (!session) redirect("/log-in");
    return (
-      <main className=" w-screen min-h-screen flex flex-col items-center">
-         <SiteHeader id={session.user.id} names={session.user.names} role={session.user.role} />
-         <div className="container">
-            <BreadcrumbCustomize/>
-         </div>
-         {children}
+      <main className="w-screen h-screen flex flex-col  font-slab">
+         <SiteHeader
+            id={session.user.id}
+            names={session.user.names}
+            role={session.user.role}
+         />
+         <article className="flex-1 w-full p-2 md:p-0  overflow-auto flex flex-col items-center bg-green-500">
+            <div className="container flex md:hidden ">
+               <BreadcrumbCustomize classNameBreadLink="text-gray-600 dark:text-white" />
+            </div>
+            {children}
+         </article>
       </main>
    );
 }
