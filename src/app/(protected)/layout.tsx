@@ -24,7 +24,7 @@ export default async function ProtectedLayout({
             names={session.user.names}
             role={session.user.role}
          />
-         <article className="flex-1 w-full p-2 md:p-0  overflow-auto flex flex-col items-center bg-green-500">
+         <article className="flex-1 w-full p-2 md:p-0  overflow-auto flex flex-col items-center ">
             <div className="container flex md:hidden ">
                <BreadcrumbCustomize classNameBreadLink="text-gray-600 dark:text-white" />
             </div>
