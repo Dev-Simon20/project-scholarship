@@ -3,7 +3,7 @@
 
 1. Instala pg admin4 (al instalr guarda muy bien tu usuario y contraseña)
 2. Crea una base de datos(solo eso no hagas nada mas )
-3. clona el proyceto desde el repositorio deSDE github [HAS CLICK AQUI](https://ejemplo.com)
+3. clona el proyceto desde el repositorio deSDE github [HAS CLICK AQUI](https://github.com/Dev-Simon20/project-scholarship.git)
 4. Ejecuta el nomando 
 ```
    npm install
