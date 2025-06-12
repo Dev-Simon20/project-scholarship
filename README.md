@@ -1,3 +1,41 @@
+#
+## Clonar el proyecto
+
+1. Instala pg admin4 (al instalr guarda muy bien tu usuario y contraseña)
+2. Crea una base de datos(solo eso no hagas nada mas )
+3. clona el proyceto desde el repositorio deSDE github [HAS CLICK AQUI](https://ejemplo.com)
+4. Ejecuta el nomando 
+```
+   npm install
+```
+5. Agrega el archivo .env que pasare por whatsapp al proyecto 
+
+6. Edita la variable DATABASE_URL agregando los datos de tu base de datos: tu usuario, tu contraseña y el nombre de la base de datos que creaste en el primer punto DATABASE_URL="postgresql://usuario:password@localhost:5432/nombre_de_bd"
+7. Ejecuta el comando para crear todas las tablas en la bd
+```
+   npx prisma migrate deploy
+
+```
+8. Ejecuta el coandno para generar el cliente de prisma
+```
+   npx prisma generate
+
+```
+9. levanta el servidor ejecutando el comando:
+```
+   npx run dev
+
+```
+
+10. Ve a la siguiente pagina y registra un usuario 
+http://localhost:3000/sign-in
+
+11. Abre tu base de datos y cambia el rol del usuario que creaste a admin
+
+12. ve ala pagina de icio de sessionhttp://localhost:3000/log-in
+
+13. ya puedes navegar por todas las rutas 
+
 ## Modelado del Sistema
 
 ### Requerimiento del sistema

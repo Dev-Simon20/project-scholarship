@@ -1,6 +1,6 @@
 import { date, string, z } from "zod";
 
-export const facultySchema = z.object({
+export const FacultySchema = z.object({
    name: string({ required_error: "El nombre es requerido" }),
    creation_date: date({
       required_error: "La fecha de creación es requerida",

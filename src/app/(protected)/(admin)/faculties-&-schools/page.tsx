@@ -1,4 +1,7 @@
 "use client";
+import { getAllFaculties } from "@/actions/faculties/getAll";
+import ModalInterno from "@/components/form-modal-faculty/form-modal-faculty";
+import FormModalSchool from "@/components/form-modal-school/form-modal-school";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
@@ -30,15 +33,19 @@ const FacultiesPage = () => {
       );
    };
 
-   useEffect(() => {
-      setTimeout(() => {
-         setFaculties(mockFaculties);
-      }, 1600);
-   }, []);
+   const fetchFaculties = async () => {
+      const res = await getAllFaculties();
+      console.log(res);
 
+      if ("error" in res) {
+         console.error("Error las fcuatades", res.error);
+      } else {
+         setFaculties(res);
+      }
+   };
    useEffect(() => {
-      console.log(searcher);
-   }, [searcher]);
+      fetchFaculties();
+   }, []);
 
    const filteredData = faculties.filter((faculty) => {
       const facultyNameMatches = sanitizeText(faculty.name).includes(
@@ -54,13 +61,13 @@ const FacultiesPage = () => {
 
    return (
       <div className="container  flex flex-col">
-         <div className="w-full max-w-4xl mx-auto  flex justify-between mt-8 mb-4 gap-16">
+         <div className="w-full max-w-4xl mx-auto  flex justify-between mt-8 mb-4 gap-2 md:gap-16">
             <div className="flex-1 relative ">
                <Search className="absolute size-4 top-1/2 -translate-y-1/2 left-2" />
                <Input
                   type="text"
                   placeholder="Busca por el nombre de la facultad o escuela"
-                  className="px-8"
+                  className="pl-8 text-xs pr-10 md:pr-8"
                   onChange={(e) => setSearcher(e.target.value)}
                   value={searcher}
                />
@@ -70,10 +77,7 @@ const FacultiesPage = () => {
                   onClick={() => setSearcher("")}
                />
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-               <Plus className="h-4 w-4 mr-2" />
-               Nueva Facultad
-            </Button>
+            <ModalInterno />
          </div>
          <div className="w-full max-w-4xl mx-auto bg-white dark:bg-neutral-900 text-gray-900 dark:text-white rounded-lg overflow-hidden border border-gray-200 dark:border-neutral-700 shadow-sm ">
             {faculties.length < 1 ? (
@@ -145,14 +149,10 @@ const FacultiesPage = () => {
                                  <h3 className="text-sm font-medium text-neutral-700 dark:text-gray-300">
                                     Escuelas
                                  </h3>
-                                 <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-7 text-xs border-gray-300 dark:border-neutral-600 hover:bg-gray-50 dark:hover:bg-neutral-800"
-                                 >
-                                    <Plus className="h-3 w-3 mr-1" />
-                                    Nueva Escuela
-                                 </Button>
+                                 <FormModalSchool
+                                    faculty_id={faculty.id}
+                                    nameFaculty={faculty.name}
+                                 />
                               </div>
                               <div className="space-y-2">
                                  {faculty.schools.map((school) => (
@@ -190,10 +190,14 @@ const FacultiesPage = () => {
                               </div>
                            </div>
                         ) : (
-                           <div className="px-4 pb-4">
+                           <div className="px-4 pb-4 flex justify-between">
                               <p className="text-gray-500 dark:text-gray-400 text-sm">
                                  Escuelas no disponibles
                               </p>
+                              <FormModalSchool
+                                 faculty_id={faculty.id}
+                                 nameFaculty={faculty.name}
+                              />
                            </div>
                         )}
                      </CollapsibleContent>

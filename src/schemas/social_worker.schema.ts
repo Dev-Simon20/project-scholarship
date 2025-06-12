@@ -1,28 +1,34 @@
 import { validatePasswordSchema } from "@/lib/signin_validate_schema";
+import { SocialWorkerStatus } from "@prisma/client";
 import { string, z } from "zod";
 
-export const socialWorkerSchema = z
-   .object({
-      names: string({ required_error: "El nombre es requerido" }).min(
-         3,
-         "El nombre debe de teber minimo 3 caracteres"
-      ),
-      first_lastname: string({
-         required_error: "Apellido paterno requerido",
-      }).min(3, "El minimo de caracteres son 3"),
-      second_lastname: string({
-         required_error: "Apellido materno requerido",
-      }).min(3, "El minimo de carracteres son 3"),
-      phone_numer: string({
-         required_error: "El numero de celular es requerido",
-      }).length(9, "Solo se admiten 9 caracteres"),
-      email: string().refine((val) => val.endsWith("@unac.edu.pe"), {
-         message: "El correo debe de termianr con @unac.edu.pe",
+export const createSocialWorkerSchema = (isEditMode = false) =>
+   z.object({
+      names: z.string().min(2, "Los nombres deben tener al menos 2 caracteres"),
+      first_lastname: z
+         .string()
+         .min(2, "El primer apellido debe tener al menos 2 caracteres"),
+      second_lastname: z
+         .string()
+         .min(2, "El segundo apellido debe tener al menos 2 caracteres"),
+      phone_number: z
+         .string()
+         .min(9, "El número de teléfono debe tener al menos 9 dígitos"),
+      dni: z
+         .string()
+         .length(8, "El DNI debe tener exactamente 8 dígitos")
+         .regex(/^\d+$/, "El DNI solo debe contener números"),
+      email: z.string().email("Ingrese un email válido"),
+      password: isEditMode
+         ? z.string().optional()
+         : z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
+      social_worker_status: z.nativeEnum(SocialWorkerStatus, {
+         errorMap: () => ({ message: "Seleccione un estado válido" }),
       }),
-      password: validatePasswordSchema,
-      passwordConfirmed: string(),
-   })
-   .refine((data) => data.password === data.passwordConfirmed, {
-      path: ["passwordConfirmed"],
-      message: "Las contraseñas no coinciden",
+      assigned_faculties: z
+         .array(z.number())
+         .min(1, "Debe asignar al menos una facultad"),
+      employment_start_date: z.date({
+         required_error: "La fecha de inicio de empleo es requerida",
+      }),
    });

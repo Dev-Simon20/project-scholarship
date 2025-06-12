@@ -2,15 +2,16 @@
 
 import { prismaDb } from "@/lib/db";
 import { FacultySchema } from "@/schemas/faculty.schema";
+import { SchoolSchema } from "@/schemas/school.schema";
 import { AuthError } from "next-auth";
 import { z } from "zod";
 
-export const createFaculty = async (values: z.infer<typeof FacultySchema>) => {
+export const createSchool = async (values: z.infer<typeof SchoolSchema>) => {
    try {
-      await prismaDb.faculty.create({
+      await prismaDb.school.create({
          data: {
+            faculty_id:values.faculty_id,
             name: values.name,
-            creation_date: values.creation_date,
          },
       });
        return {

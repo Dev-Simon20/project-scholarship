@@ -188,6 +188,7 @@ model Requirement {
   sub_title            String
   step_number          Int
   max_size_mb          String
+  url_file_example     String?
   document_type        DocumenType
   allowed_file_types   AllowedFileTypes[]
   sccholarship_process ScholarshipProcess @relation(fields: [process_id], references: [id])
