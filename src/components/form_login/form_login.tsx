@@ -47,7 +47,8 @@ const FormLogin = () => {
          if (response.error) {
              toast.error(response.error)
          } else {
-            toast.success("El login fue exitoso")
+            toast.success("El login fue exitoso");
+             router.push('/scholarships')
          }
       });
    }

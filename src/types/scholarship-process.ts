@@ -10,3 +10,5 @@ export interface ScholarshipProcess {
   requirements: number
   student_processes: number
 }
+//Proceso de beca sin recuento  
+export interface ScholarshipProcessWithoutCounts extends Omit<ScholarshipProcess, 'requirements' | 'student_processes'|'id'> {}
