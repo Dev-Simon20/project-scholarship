@@ -32,7 +32,7 @@ export default async function DashboardPage() {
                </p>
             </div>
             <Link href="/scholarships/create">
-               <Button className="flex items-center gap-2">
+               <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 cursor-pointer">
                   <PlusCircle className="h-4 w-4" />
                   Crear Nuevo Proceso
                </Button>

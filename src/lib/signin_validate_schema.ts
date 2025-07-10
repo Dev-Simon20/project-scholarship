@@ -1,4 +1,4 @@
-import { object, string, z } from "zod";
+import { number, object, string, z } from "zod";
 
 export const validatePasswordSchema = z
    .string()
@@ -39,6 +39,7 @@ export const signInValidateSchema = object({
    }),
    password: validatePasswordSchema,
    passwordConfirmed: string(),
+   school_id:number({required_error:"La escuela es requerida"})
 }).refine((data) => data.password === data.passwordConfirmed, {
    path: ["passwordConfirmed"],
    message: "Las contraseñas no coinciden",

@@ -171,13 +171,13 @@ model ScholarshipProcess {
 model StudentProcess {
   id                          Int                      @id @default(autoincrement())
   student_id                  String
-  social_worker_id            String
+  social_worker_id            String?
   sccholarship_process_id     Int
   student_upload_status       StudentUploadStatus
   social_worker_review_status SocialWorkerReviewStatus
   student                     Student                  @relation(fields: [student_id], references: [user_id])
   sccholarship_process        ScholarshipProcess       @relation(fields: [sccholarship_process_id], references: [id])
-  social_worker               SocialWorker             @relation(fields: [social_worker_id], references: [user_id])
+  social_worker               SocialWorker?             @relation(fields: [social_worker_id], references: [user_id])
   student_documents           StudentDocument[]
 }
 

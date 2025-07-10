@@ -15,9 +15,11 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import Headerform from "../header_form/header_form";
 import { Button } from "../ui/button";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { registerAuth } from "@/actions/auth/register";
 import { toast } from "sonner";
+import { School } from "@/types/school";
+import { getAllSchools } from "@/actions/faculties/schools/getAll";
 
 const FormSignin = () => {
    const [isPending, startTransition] = useTransition();
@@ -35,6 +37,19 @@ const FormSignin = () => {
       },
    });
 
+   const [schools, setSchools] = useState<School[]>([]);
+
+   const fetchSchools = async () => {
+      const res = await getAllSchools();
+      console.log(res);
+
+      if ("error" in res) {
+         console.error("Error las fcuatades", res.error);
+      } else {
+         setSchools(res);
+      }
+   };
+
    const onSubmit = (values: z.infer<typeof signInValidateSchema>) => {
       console.log(values);
       startTransition(async () => {
@@ -44,7 +59,7 @@ const FormSignin = () => {
                throw new Error(register.error);
             }
             toast.success("Registro exitoso", {
-               description:"El usuario fue registrado exitosamente",
+               description: "El usuario fue registrado exitosamente",
                action: {
                   label: "Log In",
                   onClick: () => console.log("Undo"),
@@ -57,9 +72,10 @@ const FormSignin = () => {
          }
       });
    };
-   const showToast = () => {
-      toast.success("Event has been created");
-   };
+
+   useEffect(() => {
+      fetchSchools();
+   }, []);
    return (
       <Card className="w-[650px] pt-0 overflow-hidden text-neutral-700 dark:text-white border-0 outline-0">
          <Headerform
@@ -177,6 +193,32 @@ const FormSignin = () => {
                   <section className="flex gap-4 w-full ">
                      <FormField
                         control={form.control}
+                        name="school_id"
+                        render={({ field }) => (
+                           <FormItem className="flex-1">
+                              <FormLabel>Escuela Profesional</FormLabel>
+                              <select
+                                 value={field.value}
+                                 onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                 }
+                                 className="h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                              >
+                                 <option value="">
+                                    Seleccione una escuela
+                                 </option>
+                                 {schools.map((s) => (
+                                    <option value={`${s.id}`}>{s.name}</option>
+                                 ))}
+                              </select>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                  </section>
+                  <section className="flex gap-4 w-full ">
+                     <FormField
+                        control={form.control}
                         name="password"
                         render={({ field }) => (
                            <FormItem className=" flex-1">
@@ -206,6 +248,7 @@ const FormSignin = () => {
                         )}
                      />
                   </section>
+
                   <Button type="submit" className="self-end">
                      Submit
                   </Button>

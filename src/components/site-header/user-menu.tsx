@@ -6,6 +6,7 @@ import {
    DropdownMenuItem,
    DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import LogoutButton from "../button_logout/button_logout";
 
 const UserMenu = ({ names }: { names: string }) => {
    const letter = names.charAt(0);
@@ -24,7 +25,9 @@ const UserMenu = ({ names }: { names: string }) => {
          <DropdownMenuContent align="end">
             <DropdownMenuItem>Documentation</DropdownMenuItem>
             <DropdownMenuItem>Themes</DropdownMenuItem>
-            <DropdownMenuItem>GitHub</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+               <LogoutButton/>
+            </DropdownMenuItem>
          </DropdownMenuContent>
       </DropdownMenu>
    );

@@ -60,7 +60,7 @@ export function ScholarshipProcessList({ initialProcesses }: ScholarshipProcessL
         No hay procesos de beca que coincidan con los criterios de búsqueda o aún no se han creado procesos.
       </p>
       <Link href="/scholarship-process/create">
-        <Button>Crear Nuevo Proceso</Button>
+        <Button className="bg-blue-600">Crear Nuevo Proceso</Button>
       </Link>
     </div>
   }

@@ -19,6 +19,8 @@ export const getAllScholarships = async () => {
    try {
       const session = await auth();
       const user_id = session?.user.id;
+      const role = session?.user.role;
+
       if (!user_id) {
          throw new Error("El usario no existe");
       }
@@ -30,18 +32,36 @@ export const getAllScholarships = async () => {
          },
       });
 
-      const scholarships: ScholarshipProcess[] = res.map((s) => ({
-         id: s.id,
-         created_by: s.created_by,
-         title: s.title,
-         sub_title: s.sub_title,
-         comment: s.comment,
-         steps_count: s.steps_count,
-         open_date: s.open_date,
-         close_date: s.close_date,
-         requirements: s.requirements.length,
-         student_processes: s.student_processes.length,
-      }));
+      const scholarships: ScholarshipProcess[] = await Promise.all(
+         res.map(async (s) => {
+            let status_inscription: boolean | null = null;
+
+            if (role === "student") {
+               const studentProcess = await prismaDb.studentProcess.findFirst({
+                  where: {
+                     student_id: user_id,
+                     sccholarship_process_id: s.id,
+                  },
+               });
+
+               status_inscription = studentProcess?.id ? true : false;
+            }
+
+            return {
+               id: s.id,
+               created_by: s.created_by,
+               title: s.title,
+               sub_title: s.sub_title,
+               comment: s.comment,
+               steps_count: s.steps_count,
+               open_date: s.open_date,
+               close_date: s.close_date,
+               requirements: s.requirements.length,
+               student_processes: s.student_processes.length,
+               status_inscription, // siempre presente
+            };
+         })
+      );
 
       return scholarships;
    } catch (error) {

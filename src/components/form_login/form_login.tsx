@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 
 const FormLogin = () => {
    const [hiddenPassword, setHiddenPassword] = useState(true);
-   const router=useRouter();
+   const router = useRouter();
    const form = useForm<z.infer<typeof logInSchema>>({
       resolver: zodResolver(logInSchema),
       defaultValues: {
@@ -44,11 +44,14 @@ const FormLogin = () => {
    function onSubmit(values: z.infer<typeof logInSchema>) {
       startTransition(async () => {
          const response = await logInAuth(values);
+
          if (response.error) {
-             toast.error(response.error)
+            toast.error(response.error);
          } else {
             toast.success("El login fue exitoso");
-             router.push('/scholarships')
+
+            // Redirección dura: fuerza recarga completa y evita errores con useSession
+            window.location.href = "/scholarships";
          }
       });
    }
